@@ -120,7 +120,9 @@ void boss_mode(void)
   timeout(0);
   noecho();
   clear();
+#if SOUND_ON
   Mix_ResumeMusic();
+#endif
 }
 
 /*
@@ -175,7 +177,9 @@ int main(int argc, char **argv)
   tetris_move move = TM_NONE;
   bool running = true;
   WINDOW *board, *next, *hold, *score;
+#if SOUND_ON
   Mix_Music *music;
+#endif
 
   // Load file if given a filename.
   if (argc >= 2) {
@@ -191,6 +195,7 @@ int main(int argc, char **argv)
     tg = tg_create(22, 10);
   }
 
+#if SOUND_ON
   // Initialize music.
   if (SDL_Init(SDL_INIT_AUDIO) < 0) {
     fprintf(stderr, "unable to initialize SDL\n");
@@ -209,6 +214,7 @@ int main(int argc, char **argv)
   if (music) {
     Mix_PlayMusic(music, -1);
   }
+#endif
 
   // NCURSES initialization:
   initscr();             // initialize curses
@@ -283,11 +289,13 @@ int main(int argc, char **argv)
   wclear(stdscr);
   endwin();
 
+#if SOUND_ON
   // Deinitialize Sound
   Mix_HaltMusic();
   Mix_FreeMusic(music);
   Mix_CloseAudio();
   Mix_Quit();
+#endif
 
   // Output ending message.
   printf("Game over!\n");
